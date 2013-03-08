@@ -11,6 +11,9 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 using namespace std;
 
 typedef vector<int> VecOfInt;
@@ -19,6 +22,7 @@ typedef vector<VecOfInt> v2int;
 class Puzzle {
   public:
     Puzzle();
+    Puzzle( string );
     void printBoard();
     int solve();
   private:
@@ -28,6 +32,7 @@ class Puzzle {
     int recursiveSolve(int row, int col);
     v2int Board;
     VecOfInt checker;
+    vector<string> test;
 };
 
 

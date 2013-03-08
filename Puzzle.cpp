@@ -10,26 +10,33 @@
 #include <cstdlib>
 #include "Puzzle.h"
 
+
+/***************************************************/
+// Puzzle() Constructor:
+//  - This is the 
+/***************************************************/
+
 Puzzle::Puzzle() {
 
-  int i, j;
-  int c;
+  int c; // Placeholder for the ints we read in from the file.
 
-  Board.resize(9); // This, it turns out, prevents my seg fault.
-
+  // These resizings prevent my seg fault.
+  //
+  Board.resize(9); 
   checker.resize(9+1);
 
+  // Loop through the size the board ought to be, reading in from the file
   for ( int i = 0; i < 9; i++ ) {
     for ( int j = 0; j < 9; j++ ) {
 
-      // Attempt to read in the file elements
+      // Attempt to read in the file elements,
+      // and put what we read into c
       if (!(cin >> c)) {
         cout << "Problem reading file" << endl;
         exit(1);
       } 
 
-      // Read in the file elements
-      //if (c == '-' || (c >= '0' && c <= '9')) {
+      // Push the c value we read in into our v2int Board
       if (c == 0 || (c > 0 && c <= 9)) {  
         Board[i].push_back(c);
       } else {
@@ -41,12 +48,20 @@ Puzzle::Puzzle() {
     }
   }
   
+  // Now that we've read it in, make sure it has valid rows, columns
+  // and minigrids. 
+
+  // Loop through the indexes of the rows and cols we want to check, checking each
   for ( int i = 0; i < 9; i++ ) {
+
+    // First checking the row at i index
     if (!isRowValid(i)) {
       
       cout << "Invalid row" << endl;
       exit(1);
     }
+
+    // Then checking the column at i index
     if (!isColValid(i)) {
       
       cout << "Invalid column" << endl;
@@ -54,6 +69,8 @@ Puzzle::Puzzle() {
     }
   }
   
+  // Now we're going to check the minigrids. All 9 of them.
+  // Loop through the locations of the minigrids, and check them.
   for ( int i = 0; i < 9; i += 3 ) {
     for ( int j = 0; j < 9; j += 3 ) {
       if (!isMiniGridValid(i, j)) {
@@ -64,6 +81,111 @@ Puzzle::Puzzle() {
     }
   }
 }
+
+
+/***************************************************/
+// Puzzle( string ) Constructor:
+//
+/***************************************************/
+
+Puzzle::Puzzle( string filename ) {
+    
+  // Read in line by line from the file
+  // into the vec_of_int puzzle
+  ifstream myfile;
+  myfile.open( filename.c_str() );
+  
+  // Make sure the file is open before doing this stuff
+  if ( !myfile.is_open() ) {
+      cout << "Error opening the file" << endl;
+      cout << "What's weird is that this works in the command line." << endl;
+      return;
+  }
+  
+  
+  /// THIS IS FOR TESTING
+  string line;
+  
+  while ( getline( myfile, line ) ) {
+      test.push_back( line );
+  }
+  
+  myfile.close();
+  
+  // NOW TEST THAT IT WORKED BY PRINTING IT OUT
+  //print();
+
+  // These resizings prevent my seg fault.
+  //
+  Board.resize(9); 
+  checker.resize(9+1);
+
+  int c;
+
+  for (int i = 0; i < test.size(); ++i) {
+
+    string s = test[i];
+    istringstream iss(s);
+
+    for (int j = 0; j < 9; ++j) {
+
+      if (!(iss >> c)) {
+        cout << "Problem reading file" << endl;
+        exit(1);
+      }
+
+      // Push the c value we read in into our v2int Board
+      if (c == 0 || (c > 0 && c <= 9)) {  
+        Board[i].push_back(c);
+      } else {
+
+        // Encountered a bad file element, that doesn't make sense
+        cout << "Bad file element. This doesn't look like the examples." << endl;
+        exit(1);
+      } 
+    } 
+  }
+
+  
+  // Now that we've read it in, make sure it has valid rows, columns
+  // and minigrids. 
+
+  // Loop through the indexes of the rows and cols we want to check, checking each
+  for ( int i = 0; i < 9; i++ ) {
+
+    // First checking the row at i index
+    if (!isRowValid(i)) {
+      
+      cout << "Invalid row" << endl;
+      exit(1);
+    }
+
+    // Then checking the column at i index
+    if (!isColValid(i)) {
+      
+      cout << "Invalid column" << endl;
+      exit(1);
+    }
+  }
+  
+  // Now we're going to check the minigrids. All 9 of them.
+  // Loop through the locations of the minigrids, and check them.
+  for ( int i = 0; i < 9; i += 3 ) {
+    for ( int j = 0; j < 9; j += 3 ) {
+      if (!isMiniGridValid(i, j)) {
+        
+        cout << "Invalid mini grid" << endl;
+        exit(1);
+      }
+    }
+  }
+}
+
+
+/***************************************************/
+// printBoard() Function:
+//
+/***************************************************/
 
 void Puzzle::printBoard() {
 
@@ -85,14 +207,24 @@ void Puzzle::printBoard() {
   }
 }
 
+
+/***************************************************/
+// solve() Function:
+//
+/***************************************************/
+
 int Puzzle::solve() {
 
   return recursiveSolve(0, 0);
 }
 
-int Puzzle::isRowValid(int row) {
 
-  int i;
+/***************************************************/
+// isRowValid() Function:
+//
+/***************************************************/
+
+int Puzzle::isRowValid(int row) {
 
   for ( int i = 0; i <= 9; i++ ) checker[i] = 0;
 
@@ -105,9 +237,13 @@ int Puzzle::isRowValid(int row) {
   return 1;
 }
 
-int Puzzle::isColValid(int col) {
 
-  int i, j;
+/***************************************************/
+// isColValid() Function:
+//
+/***************************************************/
+
+int Puzzle::isColValid(int col) {
     
   for ( int i = 0; i <= 9; i++ ) checker[i] = 0;
 
@@ -120,9 +256,15 @@ int Puzzle::isColValid(int col) {
   return 1;
 }
 
+
+/***************************************************/
+// isMiniGridValid() Function:
+//
+/***************************************************/
+
 int Puzzle::isMiniGridValid(int mgRow, int mgCol) {
 
-  int row, col, i;
+  int row, col;
   for ( int i = 0; i <= 9; i++ ) checker[i] = 0;
 
   for ( row = mgRow; row < mgRow+3; row++ ) {
@@ -136,11 +278,15 @@ int Puzzle::isMiniGridValid(int mgRow, int mgCol) {
   return 1;
 }
 
-int Puzzle::recursiveSolve(int row, int col) {
 
-  int i;
+/***************************************************/
+// recursiveSolve() Function:
+//
+/***************************************************/
+
+int Puzzle::recursiveSolve(int row, int col) {
   
-  /* Skip all non-dash characters */
+  // Skip all non-dash characters 
   while ( row < 9 && Board[row][col] != 0 ) {
     col++;
     if (col == 9) {
@@ -149,10 +295,10 @@ int Puzzle::recursiveSolve(int row, int col) {
     }
   }
 
-  /* Base case -- we're done */
+  // Base case -- if row == 9, we're done so we can stop recursing
   if (row == 9) return 1;
 
-  /* Try each value.  If successful, then return true. */
+  // Try each value.  If successful, then return true. 
   for ( int i = 1; i <= 9; i++ ) {
     Board[row][col] = i;
     if (isRowValid(row) && 
@@ -163,7 +309,7 @@ int Puzzle::recursiveSolve(int row, int col) {
     }
   }
 
-  /* If unsuccessful, reset the element and return false. */
+  // If unsuccessful, reset the element and return false.
   
   Board[row][col] = 0;
   return 0;
