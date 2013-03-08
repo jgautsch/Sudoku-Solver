@@ -11,24 +11,24 @@ void usage(string s)
   
 int main(int argc, char *argv[]) {
   
-  Sudoku *sud;
-
-  sud = new Sudoku;
+  Sudoku puzzle;
     
-  cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+  cout << "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "Welcome to Jon's Sudoku solver." << endl;
   cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "\nThe given puzzle looks like this: \n\n";
-  sud->printBoard();
 
-  if (!sud->solve()) {
+  puzzle.printBoard();
+
+  if (!puzzle.solve()) {
     printf("Cannot solve puzzle\n");
     exit(0);
   }
     
   cout << "\n\nThe solved puzzle looks like this: \n\n";
-  sud->printBoard();
 
+  puzzle.printBoard();
+  cout << "\n\n";
 
-  exit(0);
+  return 0;
 }

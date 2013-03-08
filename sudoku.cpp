@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include "sudoku.h"
 
-Sudoku::Sudoku()
-{
+Sudoku::Sudoku() {
+
   int i, j;
   char c;
 
@@ -11,139 +11,152 @@ Sudoku::Sudoku()
   Grid.resize(9);
   checker.resize('9'+1);
 
-  for (i = 0; i < 9; i++) {
-    for (j = 0; j < 9; j++) {
+  for ( int i = 0; i < 9; i++ ) {
+    for ( int j = 0; j < 9; j++ ) {
+
+      // Attempt to read in the file elements
       if (!(cin >> c)) {
-        cerr << "Bad Sudoku File -- not enough entries\n";
+        cout << "Problem reading file" << endl;
         exit(1);
       } 
+
+      // Read in the file elements
       if (c == '-' || (c >= '0' && c <= '9')) {
         Grid[i].push_back(c);
       } else {
-        cerr << "Bad Sudoku File -- entry: " << c << endl;
+
+        // Encountered a bad file element, that doesn't make sense
+        cout << "Bad file element. This doesn't look like the examples." << endl;
         exit(1);
       } 
     }
   }
-  for (i = 0; i < 9; i++) {
+  
+  for ( int i = 0; i < 9; i++ ) {
     if (!isRowValid(i)) {
-      cerr << "Bad Sudoku File -- Bad row " << i << endl;
+      
+      cout << "Invalid row" << endl;
       exit(1);
     }
     if (!isColValid(i)) {
-      cerr << "Bad Sudoku File -- Bad col " << i << endl;
+      
+      cout << "Invalid column" << endl;
       exit(1);
     }
   }
-  for (i = 0; i < 9; i += 3) {
-    for (j = 0; j < 9; j += 3) {
+  
+  for ( int i = 0; i < 9; i += 3 ) {
+    for ( int j = 0; j < 9; j += 3 ) {
       if (!isMiniGridValid(i, j)) {
-        cerr << "Bad Sudoku File -- Bad panel starting at row " << i << " col " << j << endl;
+        
+        cout << "Invalid mini grid" << endl;
         exit(1);
       }
     }
   }
 }
 
-void Sudoku::printBoard()
-{
-  int i, j;
+void Sudoku::printBoard() {
 
-  for (i = 0; i < Grid.size(); i++) {
-    for (j = 0; j < Grid[i].size(); j++) {
-      //if (j != 0) printf(" ");
-      printf("%c ", Grid[i][j]);
+  for ( int i = 0; i < Grid.size(); i++ ) {
+    for ( int j = 0; j < Grid[i].size(); j++ ) {
+
+      if ( Grid[i][j] == '-') cout << "  ";
+      else cout << Grid[i][j] << " ";
+
       if (j == 2 || j == 5) printf("| ");
     }
-    printf("\n");
+    cout << endl;
+
     if (i == 2 || i == 5) {
-        for( int k = 0; k < 11; k++) cout << "- ";
+
+        for( int k = 0; k < 11; k++ ) cout << "- ";
         cout << endl;
     }
   }
 }
 
-int Sudoku::solve()
-{
+int Sudoku::solve() {
+
   return recursiveSolve(0, 0);
 }
 
-int Sudoku::isRowValid(int r)
-{
+int Sudoku::isRowValid(int row) {
+
   int i;
 
-  for (i = '0'; i <= '9'; i++) checker[i] = 0;
+  for ( int i = '0'; i <= '9'; i++ ) checker[i] = 0;
 
-  for (i = 0; i < 9; i++) {
-    if (Grid[r][i] != '-') {
-      if (checker[Grid[r][i]]) return 0;
-      checker[Grid[r][i]] = 1;
+  for ( int i = 0; i < 9; i++ ) {
+    if (Grid[row][i] != '-') {
+      if (checker[Grid[row][i]]) return 0;
+      checker[Grid[row][i]] = 1;
     }
   }
   return 1;
 }
 
-int Sudoku::isColValid(int c)
-{
+int Sudoku::isColValid(int col) {
+
   int i, j;
     
-  for (i = '0'; i <= '9'; i++) checker[i] = 0;
+  for ( int i = '0'; i <= '9'; i++ ) checker[i] = 0;
 
-  for (i = 0; i < 9; i++) {
-    if (Grid[i][c] != '-') {
-      if (checker[Grid[i][c]]) return 0;
-      checker[Grid[i][c]] = 1;
+  for ( int i = 0; i < 9; i++ ) {
+    if (Grid[i][col] != '-') {
+      if (checker[Grid[i][col]]) return 0;
+      checker[Grid[i][col]] = 1;
     }
   }
   return 1;
 }
 
-int Sudoku::isMiniGridValid(int sr, int sc)
-{
-  int r, c, i;
-  for (i = '0'; i <= '9'; i++) checker[i] = 0;
+int Sudoku::isMiniGridValid(int mgRow, int mgCol) {
 
-  for (r = sr; r < sr+3; r++) {
-    for (c = sc; c < sc+3; c++) {
-      if (Grid[r][c] != '-') {
-        if (checker[Grid[r][c]]) return 0;
-        checker[Grid[r][c]] = 1;
+  int row, col, i;
+  for ( int i = '0'; i <= '9'; i++ ) checker[i] = 0;
+
+  for ( row = mgRow; row < mgRow+3; row++ ) {
+    for ( col = mgCol; col < mgCol+3; col++ ) {
+      if (Grid[row][col] != '-') {
+        if (checker[Grid[row][col]]) return 0;
+        checker[Grid[row][col]] = 1;
       }
     }
   }
   return 1;
 }
 
-int Sudoku::recursiveSolve(int r, int c)
-{
+int Sudoku::recursiveSolve(int row, int col) {
+
   int i;
   
   /* Skip all non-dash characters */
-  while (r < 9 && Grid[r][c] != '-') {
-    c++;
-    if (c == 9) {
-      r++;
-      c = 0;
+  while ( row < 9 && Grid[row][col] != '-' ) {
+    col++;
+    if (col == 9) {
+      row++;
+      col = 0;
     }
   }
 
   /* Base case -- we're done */
-  if (r == 9) return 1;
+  if (row == 9) return 1;
 
   /* Try each value.  If successful, then return true. */
-  for (i = '1'; i <= '9'; i++) {
-    Grid[r][c] = i;
-    if (isRowValid(r) && 
-        isColValid(c) && 
-        isMiniGridValid(r-r%3, c-c%3) &&
-        recursiveSolve(r, c)) {
+  for ( int i = '1'; i <= '9'; i++ ) {
+    Grid[row][col] = i;
+    if (isRowValid(row) && 
+        isColValid(col) && 
+        isMiniGridValid(row-row%3, col-col%3) &&
+        recursiveSolve(row, col)) {
       return 1;
     }
   }
 
   /* If unsuccessful, reset the element and return false. */
   
-  Grid[r][c] = '-';
+  Grid[row][col] = '-';
   return 0;
 }
 
