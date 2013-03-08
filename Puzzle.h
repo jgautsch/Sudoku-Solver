@@ -7,7 +7,7 @@ class Puzzle {
     Puzzle();
     void printBoard();
     int solve();
-  protected:
+  private:
     int isRowValid(int row);
     int isColValid(int col);
     int isMiniGridValid(int mgRow, int mgCol);
