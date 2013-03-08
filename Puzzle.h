@@ -1,6 +1,20 @@
+//
+//  Puzzle.h
+//  lab6
+//
+//  Created by Jon Gautsch on 2/28/13.
+//  Copyright (c) 2013 Jon Gautsch. All rights reserved.
+//
+
+#ifndef __lab6__Puzzle__
+#define __lab6__Puzzle__
+
 #include <vector>
 #include <iostream>
 using namespace std;
+
+typedef vector<int> VecOfInt;
+typedef vector<VecOfInt> v2int;
 
 class Puzzle {
   public:
@@ -12,6 +26,9 @@ class Puzzle {
     int isColValid(int col);
     int isMiniGridValid(int mgRow, int mgCol);
     int recursiveSolve(int row, int col);
-    vector <string> Grid;
-    vector <int> checker;
+    v2int Board;
+    VecOfInt checker;
 };
+
+
+#endif /* defined(__lab6__Puzzle__) */
