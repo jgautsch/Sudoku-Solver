@@ -19,15 +19,15 @@ int main(int argc, char *argv[]) {
   cout << "Welcome to Jon's Sudoku solver." << endl;
   cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "\nThe given puzzle looks like this: \n\n";
-  sud->Print_Screen();
+  sud->printBoard();
 
-  if (!sud->Solve()) {
+  if (!sud->solve()) {
     printf("Cannot solve puzzle\n");
     exit(0);
   }
     
   cout << "\n\nThe solved puzzle looks like this: \n\n";
-  sud->Print_Screen();
+  sud->printBoard();
 
 
   exit(0);

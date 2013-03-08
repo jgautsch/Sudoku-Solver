@@ -5,13 +5,13 @@ using namespace std;
 class Sudoku {
   public:
     Sudoku();
-    void Print_Screen();
-    int Solve();
+    void printBoard();
+    int solve();
   protected:
-    int Is_Row_Valid(int r);
-    int Is_Col_Valid(int c);
-    int Is_Panel_Valid(int sr, int sc);
-    int Recursive_Solve(int r, int c);
+    int isRowValid(int r);
+    int isColValid(int c);
+    int isMiniGridValid(int sr, int sc);
+    int recursiveSolve(int r, int c);
     vector <string> Grid;
     vector <int> checker;
 };

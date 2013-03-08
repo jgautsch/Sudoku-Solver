@@ -7,6 +7,7 @@ Sudoku::Sudoku()
   int i, j;
   char c;
 
+  cout << "!!!!       " << Grid.size() << endl;
   Grid.resize(9);
   checker.resize('9'+1);
 
@@ -25,18 +26,18 @@ Sudoku::Sudoku()
     }
   }
   for (i = 0; i < 9; i++) {
-    if (!Is_Row_Valid(i)) {
+    if (!isRowValid(i)) {
       cerr << "Bad Sudoku File -- Bad row " << i << endl;
       exit(1);
     }
-    if (!Is_Col_Valid(i)) {
+    if (!isColValid(i)) {
       cerr << "Bad Sudoku File -- Bad col " << i << endl;
       exit(1);
     }
   }
   for (i = 0; i < 9; i += 3) {
     for (j = 0; j < 9; j += 3) {
-      if (!Is_Panel_Valid(i, j)) {
+      if (!isMiniGridValid(i, j)) {
         cerr << "Bad Sudoku File -- Bad panel starting at row " << i << " col " << j << endl;
         exit(1);
       }
@@ -44,7 +45,7 @@ Sudoku::Sudoku()
   }
 }
 
-void Sudoku::Print_Screen()
+void Sudoku::printBoard()
 {
   int i, j;
 
@@ -62,12 +63,12 @@ void Sudoku::Print_Screen()
   }
 }
 
-int Sudoku::Solve()
+int Sudoku::solve()
 {
-  return Recursive_Solve(0, 0);
+  return recursiveSolve(0, 0);
 }
 
-int Sudoku::Is_Row_Valid(int r)
+int Sudoku::isRowValid(int r)
 {
   int i;
 
@@ -82,7 +83,7 @@ int Sudoku::Is_Row_Valid(int r)
   return 1;
 }
 
-int Sudoku::Is_Col_Valid(int c)
+int Sudoku::isColValid(int c)
 {
   int i, j;
     
@@ -97,7 +98,7 @@ int Sudoku::Is_Col_Valid(int c)
   return 1;
 }
 
-int Sudoku::Is_Panel_Valid(int sr, int sc)
+int Sudoku::isMiniGridValid(int sr, int sc)
 {
   int r, c, i;
   for (i = '0'; i <= '9'; i++) checker[i] = 0;
@@ -113,7 +114,7 @@ int Sudoku::Is_Panel_Valid(int sr, int sc)
   return 1;
 }
 
-int Sudoku::Recursive_Solve(int r, int c)
+int Sudoku::recursiveSolve(int r, int c)
 {
   int i;
   
@@ -132,10 +133,10 @@ int Sudoku::Recursive_Solve(int r, int c)
   /* Try each value.  If successful, then return true. */
   for (i = '1'; i <= '9'; i++) {
     Grid[r][c] = i;
-    if (Is_Row_Valid(r) && 
-        Is_Col_Valid(c) && 
-        Is_Panel_Valid(r-r%3, c-c%3) &&
-        Recursive_Solve(r, c)) {
+    if (isRowValid(r) && 
+        isColValid(c) && 
+        isMiniGridValid(r-r%3, c-c%3) &&
+        recursiveSolve(r, c)) {
       return 1;
     }
   }
