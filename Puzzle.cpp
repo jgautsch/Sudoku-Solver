@@ -275,7 +275,9 @@ int Puzzle::recursiveSolve(int row, int col) {
   // Base case -- if row == 9, we're done so we can stop recursing
   if (row == 9) return 1;
 
-
+  /**************************************************************/
+  //    VISUALIZATION
+  /**************************************************************/
   // This is kind of cool:
   // Uncomment this little set right here if you want to see 
   // a visualization of the computer solving the puzzle.
@@ -284,6 +286,7 @@ int Puzzle::recursiveSolve(int row, int col) {
   // system("clear");
   // printBoard();
   // usleep(7000);
+  /**************************************************************/
 
 
 
