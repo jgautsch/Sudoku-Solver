@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
-#include "sudoku.h"
+#include "Puzzle.h"
 
 void usage(string s)
 {
@@ -11,23 +11,23 @@ void usage(string s)
   
 int main(int argc, char *argv[]) {
   
-  Sudoku puzzle;
+  Puzzle sudoku;
     
   cout << "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "Welcome to Jon's Sudoku solver." << endl;
   cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "\nThe given puzzle looks like this: \n\n";
 
-  puzzle.printBoard();
+  sudoku.printBoard();
 
-  if (!puzzle.solve()) {
+  if (!sudoku.solve()) {
     printf("Cannot solve puzzle\n");
     exit(0);
   }
     
   cout << "\n\nThe solved puzzle looks like this: \n\n";
 
-  puzzle.printBoard();
+  sudoku.printBoard();
   cout << "\n\n";
 
   return 0;

@@ -1,8 +1,8 @@
 #include <cstdio>
 #include <cstdlib>
-#include "sudoku.h"
+#include "Puzzle.h"
 
-Sudoku::Sudoku() {
+Puzzle::Puzzle() {
 
   int i, j;
   char c;
@@ -56,7 +56,7 @@ Sudoku::Sudoku() {
   }
 }
 
-void Sudoku::printBoard() {
+void Puzzle::printBoard() {
 
   for ( int i = 0; i < Grid.size(); i++ ) {
     for ( int j = 0; j < Grid[i].size(); j++ ) {
@@ -76,12 +76,12 @@ void Sudoku::printBoard() {
   }
 }
 
-int Sudoku::solve() {
+int Puzzle::solve() {
 
   return recursiveSolve(0, 0);
 }
 
-int Sudoku::isRowValid(int row) {
+int Puzzle::isRowValid(int row) {
 
   int i;
 
@@ -96,7 +96,7 @@ int Sudoku::isRowValid(int row) {
   return 1;
 }
 
-int Sudoku::isColValid(int col) {
+int Puzzle::isColValid(int col) {
 
   int i, j;
     
@@ -111,7 +111,7 @@ int Sudoku::isColValid(int col) {
   return 1;
 }
 
-int Sudoku::isMiniGridValid(int mgRow, int mgCol) {
+int Puzzle::isMiniGridValid(int mgRow, int mgCol) {
 
   int row, col, i;
   for ( int i = '0'; i <= '9'; i++ ) checker[i] = 0;
@@ -127,7 +127,7 @@ int Sudoku::isMiniGridValid(int mgRow, int mgCol) {
   return 1;
 }
 
-int Sudoku::recursiveSolve(int row, int col) {
+int Puzzle::recursiveSolve(int row, int col) {
 
   int i;
   

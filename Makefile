@@ -1,10 +1,10 @@
 all: main
 
-main: main.o sudoku.o
-	g++ main.o sudoku.o -o main
+main: main.o Puzzle.o
+	g++ main.o Puzzle.o -o main
 
-sudoku.o: sudoku.cpp
-	g++ -c sudoku.cpp
+Puzzle.o: Puzzle.cpp
+	g++ -c Puzzle.cpp
 
 clean:
 	rm -f *.o main

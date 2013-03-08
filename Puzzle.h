@@ -2,9 +2,9 @@
 #include <iostream>
 using namespace std;
 
-class Sudoku {
+class Puzzle {
   public:
-    Sudoku();
+    Puzzle();
     void printBoard();
     int solve();
   protected:
