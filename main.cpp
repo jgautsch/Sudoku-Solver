@@ -10,12 +10,14 @@
 #include <cstdlib>
 #include "Puzzle.h"
 
-void usage(string s)
-{
-  cerr << "usage: sudoku solve(yes|no) output-type(screen|convert) - puzzle on stdin\n";
-  if (s != "") cerr << s << endl;
-  exit(0);
-}
+
+/***************************************************/
+// printAndSolve() Function:
+//  - Basically just for not repeating the control
+//    and flow of the program.
+//  - It calls a coupld of comands on the Puzzle
+//    instance, and prints a few things too.
+/***************************************************/
 
 void printAndSolve( Puzzle sudoku ) {
 
@@ -35,66 +37,43 @@ void printAndSolve( Puzzle sudoku ) {
 }
 
 
-void choiceOne( string filename ) {
-  Puzzle sudoku( filename );
-              
-  printAndSolve( sudoku );
-}
-
-void choiceTwo() {
-  Puzzle sudoku;
-
-  printAndSolve( sudoku );
-
-}
-
-void choiceThree() {
-
-  string filename;
-  cout << "Enter the filename: " << endl;
-  cout << ">> ";
-  cin >> filename;
-  Puzzle sudoku( filename );
-
-  printAndSolve( sudoku );
-
-}
-
+/***************************************************/
+// main() Function:
+//  - Where it all begins. 
+/***************************************************/
 
 int main(int argc, char *argv[]) {
 
+  // Welcome the user to the program
   cout << "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
   cout << "Welcome to Jon's Sudoku solver." << endl;
   cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n" << endl;
 
-  int choice;
-  cout << "How is the file being handled? :" << endl;
-  cout << "  (1) Passed as an argument to the program when running it?" << endl;
-  cout << "       ex. './main puzzle.txt'" << endl;
-  cout << "  (2) Passed into the in stream of the program executing?" << endl;
-  cout << "       ex. './main < puzzle.txt'" << endl;
-  cout << "  (3) Or would you like to type in the filename of the puzzle?" << endl;
-  cout << ">> ";
-  cin >> choice;
+  // If the user passed the puzzle file as an argument, run with it.
+  if (argv[1]) {
 
-  do {
-    switch( choice ) {
+    // Call Puzzle constructor passing it the name of the file
+    Puzzle sudoku( argv[1] );
 
-      case 1: choiceOne( argv[1] );
-              break;
+    // Now go through the print and solve steps/commands
+    printAndSolve( sudoku );
 
-      case 2: choiceTwo();
-              break;
+  // Else if the didn't pass the program a puzzle to solve, ask them for 
+  // a puzzle filename
+  } else {
+    string filename;
+    cout << "No puzzle file was passed to the program as an argument." << endl;
+    cout << "Please enter the filename of the puzzle you wish to solve." << endl;
+    cout << ">> ";
+    cin >> filename;
 
-      case 3: choiceThree();
-              break;
+    // Call Puzzle constructor passing it the name of the file
+    Puzzle sudoku( filename );
 
-      default: cout << "Invalid selection. Please choose again" << endl;
-               cout << ">> ";
-               cin >> choice;
-               break;
-    }
-  } while( choice != 1 && choice != 2 && choice != 3 );
+    // Now go through the print and solve steps/commands
+    printAndSolve( sudoku );
+
+  }
   
   return 0;
 }
