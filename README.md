@@ -4,12 +4,12 @@
 	
 ###	The program is built by running make in the program directory. 
 
-	The user uses the program by running it by either passing the filename to the program as an argument
+The user uses the program by running it by either passing the filename to the program as an argument
 like './main filename.txt'.  If the user does not pass the filename to the program as an argument, then the user 
 will be prompted to enter the filename while in the program.  Then the sudoku will be solved and the solution 
 will be printed to the screen.
 
-	If the user wants to visualize how the computer is solving the puzzle, there are 3 lines I put in the 
+If the user wants to visualize how the computer is solving the puzzle, there are 3 lines I put in the 
 recursiveSolve() function in the Puzzle.cpp file that can be uncommented that will clear the console, print the
 board, and usleep(7000). This will print the board in the same spot in its current state on every pass of the 
 recursiveSolve, so you see exactly what the computer is working on/thinking or moving towards the solution.
@@ -19,11 +19,11 @@ recursiveSolve, so you see exactly what the computer is working on/thinking or m
 
 ## HOW THE PROGRAM WORKS INTERNALLY:
 
-	The program works internally by using the Puzzle class.  The main functionality of the program uses
+The program works internally by using the Puzzle class.  The main functionality of the program uses
 the Puzzle class's constructors and functions printBoard(), solve(), recursiveSolve(), and the functions that 
 check if rows, columns and mini grids are valid - isRowValid(), isColValid(), and isMiniGridValid(). 
 
-	Once the constructor sets the 2D vector Board to the represent the puzzle passed to the program and
+Once the constructor sets the 2D vector Board to the represent the puzzle passed to the program and
 verifies that it is a valid puzzle, the board is printed to show the user the puzzle, and then the solve() function
 is called. The solve function simply calls the recursiveSolve() function, which solves the puzzle by checking
 if potential values lead to a solution. Values that are not a potential solution are not tried (leaving the entire
@@ -39,7 +39,7 @@ with the new hypothetical step to a solution.
 
 ## HOW THE PROGRAM WAS VERIFIED:
 
-	During the course of running the program, each move on the board is verified by the row, column
+During the course of running the program, each move on the board is verified by the row, column
 and mini grid validator functions in the program to make sure repeats aren't tolerated.  Then once the program
 was successfully and consistently outputting solutions, they were checked by using my program to solve 
 sudoku puzzles, and then plugging those puzzles into other solvers (online) and comparing the solutions.
@@ -50,7 +50,7 @@ The solutions were the same so my program solves them correctly.
 
 ## WHAT WORKED/DIDN'T WORK WELL, AND GENERALLY "HOW" IT WAS IMPLEMENTED:
 
-	Reading in of the puzzle by default reads from a file using the file io stream. The file can be 
+Reading in of the puzzle by default reads from a file using the file io stream. The file can be 
 passed to the program as an argument when running the program, or by typing in the filename while running
 the program. The file is then opened, and read into a vector of strings, each row as a string. The vector
 of strings is then converted to the integer tokens and pushed into the 2D vector of vector<int> Board, and
@@ -60,7 +60,7 @@ puzzle ints from the istream and constructs the Board using those. Using it this
 main.cpp program however. If the user changed the main.cpp file to just use the default constructor, the puzzle
 would be passed to the istream of the program at execution time by doing something like this: './main < puzzle.txt'.
 
- 	The checking of rows, columns, and mini grids involves using the vector<int> checker.  When each 
+The checking of rows, columns, and mini grids involves using the vector<int> checker.  When each 
 of the checker/validating functions is called, the are checking a particular row, column, or mini grid.  First the
 checker vector is filled with zeros. Then the row/col/minigrid is iterated through and the index corresponding
 to the value in each row/col/minigrid cell is changed in the checker vector from 0 to 1, to indicate that that
@@ -70,13 +70,13 @@ it is an invalid row/col/minigrid that won't work.
 	
 #	NOW, the real meat of the program- the solving.
 	
-	I had first tried some kind of ridiculous and slow (we're talking like O(n^3 or 4) mega iteration loop set
+I had first tried some kind of ridiculous and slow (we're talking like O(n^3 or 4) mega iteration loop set
 that would iterate over the row and cols and mini grids filling in values when they were obvious, and then 
 taking a fresh look at the puzzle to see if that newly filled in spot revealed any more obvious to solve spots, and 
 running that until (hopefully) all the spots were filled in. This only worked for very easy puzzles I tested it with,
 and wouldn't work for anything that didn't have a chain of clearly obvious spot fill-ins leading to the solution.
 
-	I had to scrap that because it didn't work, and so read about solving recursively.  Sudoku can be thought
+I had to scrap that because it didn't work, and so read about solving recursively.  Sudoku can be thought
 of as a giant tree, with each node being a potential board state, and branches reach out to a board state that
 has all the same numbers, plus one more spot filled in. In this tree of potential board values, there are lots and lots 
 of invalid boards and branches. An invalid branch starts with a single invalid board. The unsolved problem is 
@@ -93,16 +93,6 @@ the solution is found (it is valid on all accounts, and row and col are both at 
 all the way up its cool recursive chain to signal that it found the solution, and to keep it.  The solution is then printed.
 This recursion is awesome.
 
-	Regarding the grading criteria that wouldn't be met by say, a brute force algorithm- This algorithm does have the 
-functionality of eliminating values to (not) place in that spot in the current row/column/minigrid by recursing down and 
-seeing if a solution is found via that value in that spot, or if that value is already in the col, row, or mini grid. If not a solution 
-branch, it cuts off that entire branch of possibilities from what it looks at, but does so recursively, like from the points of 
-invalidity. ALSO, it satisfies the criteria "functionality such that if onlya single value is left, the square is filled with that 
-value and the process is restarted", in a little bit of a cool/tricky recursive way. If there are multiple values left, the recurse 
-down to the bottom of the pool, and then fill up the solution backwards, so that in a way, there's always only a single value 
-left, then the square is filled in, the recursiveSolve returns 1 signalling to the chain of recursive funcitons that came before 
-it that they touched down, and for them to all fill in their single value left, until the puzzle is full, truly (not just full of data 
-being tried by the recursion.)
 
 
 
