@@ -283,9 +283,9 @@ int Puzzle::recursiveSolve(int row, int col) {
   // a visualization of the computer solving the puzzle.
   // Heads up though, it takes forever for the hard puzzle.
 
-  // system("clear");
-  // printBoard();
-  // usleep(7000);
+  system("clear");
+  printBoard();
+  usleep(14000);
   /**************************************************************/
 
 

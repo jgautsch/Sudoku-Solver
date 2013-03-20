@@ -1,19 +1,14 @@
-Lab 6 - Sudoku
-CSE 20212
-3/8/13
+# Sudoku Solver. Solves any 9x9 Solvable Sudoku Puzzle
 
-/****    I ACCEPT THE CODER DOLLAR CHALLENGE. MY PROGRAM SOLVES THEM ALL ********/
-
-
-
-HOW THE USER USES THE PROGRAM:
+## HOW THE USER USES THE PROGRAM:
 	
-	The program is built by running make in the program directory. 
+###	The program is built by running make in the program directory. 
 
 	The user uses the program by running it by either passing the filename to the program as an argument
 like './main filename.txt'.  If the user does not pass the filename to the program as an argument, then the user 
 will be prompted to enter the filename while in the program.  Then the sudoku will be solved and the solution 
 will be printed to the screen.
+
 	If the user wants to visualize how the computer is solving the puzzle, there are 3 lines I put in the 
 recursiveSolve() function in the Puzzle.cpp file that can be uncommented that will clear the console, print the
 board, and usleep(7000). This will print the board in the same spot in its current state on every pass of the 
@@ -22,11 +17,12 @@ recursiveSolve, so you see exactly what the computer is working on/thinking or m
 
 
 
-HOW THE PROGRAM WORKS INTERNALLY:
+## HOW THE PROGRAM WORKS INTERNALLY:
 
 	The program works internally by using the Puzzle class.  The main functionality of the program uses
 the Puzzle class's constructors and functions printBoard(), solve(), recursiveSolve(), and the functions that 
 check if rows, columns and mini grids are valid - isRowValid(), isColValid(), and isMiniGridValid(). 
+
 	Once the constructor sets the 2D vector Board to the represent the puzzle passed to the program and
 verifies that it is a valid puzzle, the board is printed to show the user the puzzle, and then the solve() function
 is called. The solve function simply calls the recursiveSolve() function, which solves the puzzle by checking
@@ -41,7 +37,7 @@ with the new hypothetical step to a solution.
 
 
 
-HOW THE PROGRAM WAS VERIFIED:
+## HOW THE PROGRAM WAS VERIFIED:
 
 	During the course of running the program, each move on the board is verified by the row, column
 and mini grid validator functions in the program to make sure repeats aren't tolerated.  Then once the program
@@ -52,9 +48,19 @@ The solutions were the same so my program solves them correctly.
 
 
 
-WHAT WORKED/DIDN'T WORK WELL, AND GENERALLY "HOW" IT WAS IMPLEMENTED:
+## WHAT WORKED/DIDN'T WORK WELL, AND GENERALLY "HOW" IT WAS IMPLEMENTED:
 
-	The checking of rows, columns, and mini grids involves using the vector<int> checker.  When each 
+	Reading in of the puzzle by default reads from a file using the file io stream. The file can be 
+passed to the program as an argument when running the program, or by typing in the filename while running
+the program. The file is then opened, and read into a vector of strings, each row as a string. The vector
+of strings is then converted to the integer tokens and pushed into the 2D vector of vector<int> Board, and
+then the program is ready to cook. This all happens in the non-default constructor that takes the file name
+as a string. The puzzle can also be read in using the istream and the default constructor, which reads in the
+puzzle ints from the istream and constructs the Board using those. Using it this way involves changing the 
+main.cpp program however. If the user changed the main.cpp file to just use the default constructor, the puzzle
+would be passed to the istream of the program at execution time by doing something like this: './main < puzzle.txt'.
+
+ 	The checking of rows, columns, and mini grids involves using the vector<int> checker.  When each 
 of the checker/validating functions is called, the are checking a particular row, column, or mini grid.  First the
 checker vector is filled with zeros. Then the row/col/minigrid is iterated through and the index corresponding
 to the value in each row/col/minigrid cell is changed in the checker vector from 0 to 1, to indicate that that
@@ -62,13 +68,14 @@ value exists in the row/col/minigrid.  If the function finds a value twice in th
 realize that that index in the checker vector is already 1, and so it is a repeat value and will return 0 because
 it is an invalid row/col/minigrid that won't work.
 	
-	NOW, the real meat of the program- the solving.
+#	NOW, the real meat of the program- the solving.
 	
 	I had first tried some kind of ridiculous and slow (we're talking like O(n^3 or 4) mega iteration loop set
 that would iterate over the row and cols and mini grids filling in values when they were obvious, and then 
 taking a fresh look at the puzzle to see if that newly filled in spot revealed any more obvious to solve spots, and 
 running that until (hopefully) all the spots were filled in. This only worked for very easy puzzles I tested it with,
 and wouldn't work for anything that didn't have a chain of clearly obvious spot fill-ins leading to the solution.
+
 	I had to scrap that because it didn't work, and so read about solving recursively.  Sudoku can be thought
 of as a giant tree, with each node being a potential board state, and branches reach out to a board state that
 has all the same numbers, plus one more spot filled in. In this tree of potential board values, there are lots and lots 
@@ -85,6 +92,7 @@ the invalid branches because it identifies them recursively, and only reaches al
 the solution is found (it is valid on all accounts, and row and col are both at the end) recursiveSolve returns 1
 all the way up its cool recursive chain to signal that it found the solution, and to keep it.  The solution is then printed.
 This recursion is awesome.
+
 	Regarding the grading criteria that wouldn't be met by say, a brute force algorithm- This algorithm does have the 
 functionality of eliminating values to (not) place in that spot in the current row/column/minigrid by recursing down and 
 seeing if a solution is found via that value in that spot, or if that value is already in the col, row, or mini grid. If not a solution 
